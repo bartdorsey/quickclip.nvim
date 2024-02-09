@@ -24,11 +24,10 @@ Call the setup function
 require('quickclip').setup()
 ```
 
-There's two commands included which you can map to keybinds
+The main command to trigger the window is `QuickClip`
 
 ```lua
-vim.set.keymap("n", "<cmd>QuickClip<cr>", { desc = "Open QuickClip" })
-vim.set.keymap("n", "<cmd>QuickClipClose<cr>", { desc = "Close QuickClip" })
+vim.set.keymap("n", "<leader>p", "<cmd>QuickClip<cr>", { desc = "Open QuickClip" })
 ```
 
 You can press `q` or `ESC` to close the window, or press the number that appears

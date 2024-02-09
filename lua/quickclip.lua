@@ -3,67 +3,21 @@ M = {}
 --- @class QuickClipOptions
 --- @field public icon? string
 
--- Define the queue with a given max size
-local function createQueue(maxSize)
-    local self = {
-        items = {},
-        first = 0,
-        last = -1,
-        maxSize = maxSize,
-    }
-
-    -- Enqueue an item
-    function self:enqueue(value)
-        if #self.items == self.maxSize then
-            -- Remove the oldest item if we hit the max size
-            table.remove(self.items, 1)
-        else
-            self.last = self.last + 1
-        end
-        self.items[self.last] = value
-    end
-
-    -- Dequeue an item
-    function self:dequeue()
-        if self.first > self.last then
-            error("Queue is empty")
-        end
-        local value = self.items[self.first]
-        self.items[self.first] = nil -- Remove the item
-        self.first = self.first + 1
-        return value
-    end
-
-    -- ipairs iterator
-    function self:ipairs()
-        local function iter(_, i)
-            i = i + 1
-            local v = self.items[i]
-            if v then
-                return i, v
-            end
-        end
-        return iter, nil, 0
-    end
-
-    -- pairs iterator (same as ipairs in this context)
-    self.pairs = self.ipairs
-
-    return self
-end
-
 --- QuickClip Setup
 ---@param opts? QuickClipOptions
 ---@return nil
 M.setup = function(opts)
     opts = opts or {}
     -- State variables
+    local createQueue = require("queue")
     local history = createQueue(10)
     local quickclip_window = nil
     local icon = opts.icon or ""
 
+    local quickclip_group = vim.api.nvim_create_augroup("QuickClip", {})
     -- When someone yanks, grab the text and store it in the history
     vim.api.nvim_create_autocmd("TextYankPost", {
+        group = quickclip_group,
         callback = function()
             -- Make a deep copy right away to try to reduce
             -- race conditions caused by multiple yanks
@@ -101,7 +55,6 @@ M.setup = function(opts)
         -- Get the current window we will be pasting into
         local current_win = vim.api.nvim_get_current_win()
         if current_win == nil then
-            print("No current window")
             return
         end
         local current_pos = vim.api.nvim_win_get_cursor(current_win)
