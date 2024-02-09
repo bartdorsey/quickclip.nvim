@@ -4,7 +4,7 @@ The goal of QuickClip is to provide a really simple interface that shows you the
 last 10 items you have yanked, and lets you quickly pick one by number to paste
 back into your buffer.
 
-[!quickclip](./quickclip.png)
+![quickclip](./quickclip.png)
 
 ## Goals
 
