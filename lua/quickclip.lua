@@ -38,14 +38,22 @@ M.setup = function(opts)
 
             -- Insert the entry into the history table
             history:enqueue(contents)
+            print(vim.inspect(history))
         end,
     })
 
     -- Render the contents of the window
-    local function render_history_ui()
+    local function render_history_ui(width)
         local output = {}
-        for i, value in history:ipairs() do
-            table.insert(output, string.format("%2i > %s", i, value[1]))
+        width = width - 8
+        for _, value in history:ipairs() do
+            -- Trims whitespace from display
+            local first = value[1]:match("^%s*(.-)%s*$")
+            -- If it's too long, add ...
+            if #first >= width then
+                first = string.sub(first, 1, width) .. "..."
+            end
+            table.insert(output, string.format("%s", first))
         end
         return output
     end
@@ -67,11 +75,11 @@ M.setup = function(opts)
         local win_width = vim.api.nvim_win_get_width(0)
         local win_height = vim.api.nvim_win_get_height(0)
         local height = 10
-        local width = 50
+        local width = math.floor(win_width * 0.8)
 
         -- Create a new buffer to hold the ui
         local buf = vim.api.nvim_create_buf(false, true)
-        vim.api.nvim_buf_set_lines(buf, 0, 1, true, render_history_ui())
+        vim.api.nvim_buf_set_lines(buf, 0, 1, true, render_history_ui(width))
 
         -- Set q to close
         vim.api.nvim_buf_set_keymap(
@@ -101,6 +109,9 @@ M.setup = function(opts)
             height = height,
             border = "rounded",
             style = "minimal",
+        })
+        vim.api.nvim_set_option_value("number", true, {
+            win = quickclip_window,
         })
 
         -- Set keymaps for items in the list

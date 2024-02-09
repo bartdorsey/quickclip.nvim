@@ -9,6 +9,8 @@ back into your buffer.
 -   Automatically keep a rolling list of the last 10 yanked lines
 -   Provide window of the last 10 items where you can press a number and have it
     immediately paste
+-   Ignore duplicate yanks
+-   Ignore empty lines
 
 ## Installation
 

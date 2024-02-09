@@ -9,9 +9,9 @@ local function createQueue(maxSize)
     function self:enqueue(value)
         if #self.items == self.maxSize then
             -- Remove the oldest item if we hit the max size
-            table.remove(self.items, 1)
+            table.remove(self.items)
         end
-        table.insert(self.items, value)
+        table.insert(self.items, 1, value)
     end
 
     -- Dequeue an item
@@ -19,7 +19,7 @@ local function createQueue(maxSize)
         if #self.items == 0 then
             error("Queue is empty")
         end
-        local value = self.items.remove(self.items, 1)
+        local value = self.items.remove(self.items)
         return value
     end
 
