@@ -87,6 +87,7 @@ M.quickclip_open = function()
                 vim.api.nvim_put(value, "c", true, true)
                 vim.api.nvim_win_close(window, true)
                 vim.api.nvim_buf_delete(buf, { force = true })
+                window = nil
             end,
         })
     end
