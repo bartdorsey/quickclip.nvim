@@ -14,7 +14,6 @@ local function createQueue(maxSize)
 
     -- Enqueue an item
     function self:enqueue(value)
-        print(vim.inspect(self))
         if #self.items == self.maxSize then
             -- Remove the oldest item if we hit the max size
             table.remove(self.items, 1)
@@ -78,16 +77,13 @@ M.setup = function(opts)
             -- Check history to see if we already have an indentical entry
             for _, entry in history:ipairs() do
                 if vim.deep_equal(entry, contents) then
-                    print("Duplicate Line")
+                    -- duplicate line found, don't do anything
                     return
                 end
             end
 
             -- Insert the entry into the history table
             history:enqueue(contents)
-            for val in history:pairs() do
-                print(vim.inspect(val))
-            end
         end,
     })
 
