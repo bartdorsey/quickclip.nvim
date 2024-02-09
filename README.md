@@ -23,3 +23,13 @@ Call the setup function
 ```lua
 require('quickclip').setup()
 ```
+
+There's two commands included which you can map to keybinds
+
+```lua
+vim.set.keymap("n", "<cmd>QuickClip<cr>", { desc = "Open QuickClip" })
+vim.set.keymap("n", "<cmd>QuickClipClose<cr>", { desc = "Close QuickClip" })
+```
+
+You can press `q` or `ESC` to close the window, or press the number that appears
+to paste that item.
